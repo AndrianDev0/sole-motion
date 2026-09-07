@@ -116,13 +116,13 @@ body{font-family:'Manrope',Arial,Helvetica,sans-serif}
 .ticker-run{display:flex;align-items:center;flex-shrink:0;min-height:88px;padding:0 3vw;gap:2.7vw}
 .ticker-word{display:flex;align-items:center;flex-shrink:0;white-space:nowrap;font-family:'Nunito',Arial,sans-serif;font-size:clamp(26px,3.2vw,54px);font-weight:900;letter-spacing:-.045em;line-height:1}
 .ticker-letter{display:inline-block;background:linear-gradient(112deg,var(--ink) 0%,var(--ink) 30%,var(--mint) 44%,var(--white) 50%,var(--mint) 56%,var(--ink) 72%,var(--ink) 100%);background-size:300% 100%;background-position:0 50%;-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;font-size:inherit;line-height:inherit;animation:ticker-letter-pulse 3.2s cubic-bezier(.4,0,.2,1) infinite;will-change:transform,background-position;filter:drop-shadow(0 0 0 color-mix(in srgb,var(--mint) 0%,transparent))}
-.ticker-symbol{display:inline-block;flex-shrink:0;margin-inline:1.05vw;color:var(--violet);font-size:1.2em;line-height:1;animation:ticker-symbol-pulse 2.2s ease-in-out infinite;will-change:transform}
+.ticker-symbol{display:block;flex-shrink:0;width:1.05em;height:1.05em;margin-inline:1.05vw;color:var(--violet);animation:ticker-symbol-pulse 2.2s ease-in-out infinite;will-change:transform}
 @keyframes ticker-marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 @keyframes ticker-letter-pulse{0%,100%{background-position:0 50%;transform:translateY(0);filter:drop-shadow(0 0 0 color-mix(in srgb,var(--mint) 0%,transparent))}50%{background-position:100% 50%;transform:translateY(-2px);filter:drop-shadow(0 5px 10px color-mix(in srgb,var(--mint) 30%,transparent))}}
 @keyframes ticker-symbol-pulse{0%,100%{opacity:.72;transform:rotate(0deg) scale(.92)}50%{opacity:1;transform:rotate(45deg) scale(1.08)}}
 @keyframes ticker-ribbon{0%,100%{background-position:0 0}50%{background-position:100% 0}}
 @keyframes ticker-sheen{0%{background-position:-120% 0}100%{background-position:120% 0}}
-@media(max-width:640px){.ticker-run{min-height:66px;padding:0 5vw;gap:6vw}.ticker-word{font-size:28px}.ticker-symbol{margin-inline:3vw;font-size:1.1em}}
+@media(max-width:640px){.ticker-run{min-height:66px;padding:0 5vw;gap:6vw}.ticker-word{font-size:28px}.ticker-symbol{width:28px;height:28px;margin-inline:3vw}}
 @media(prefers-reduced-motion:reduce){.ticker::before,.ticker::after,.ticker>div.ticker-track{animation:none;transform:none}.ticker-letter,.ticker-symbol{animation:none;transform:none;background-position:50% 50%}}
 
 /* Keep the hero calm while the 3D asset loads, then reveal the canvas softly. */
@@ -289,3 +289,12 @@ footer{padding:52px 4.2% 24px;background:color-mix(in srgb,var(--mint) 62%,var(-
 @media(max-width:1000px) and (min-width:641px){.editorial-grid{gap:14px}.editorial-card{min-height:470px;padding:16px}.story-frame{height:260px;margin-block:19px 15px}.story-copy{grid-template-columns:1fr;gap:9px}.story-copy h3{font-size:25px}.story-copy p{max-width:210px}.story-tags{margin-top:15px}}
 @media(max-width:640px){.editorial-grid{display:flex;align-items:stretch;gap:14px}.editorial-card{flex:0 0 84vw;min-height:500px;scroll-snap-align:start;scroll-snap-stop:always}.editorial-card:nth-child(2){--stack-y:0px}.story-frame{height:285px}.story-copy h3{font-size:31px}.story-copy p{font-size:11px}.story-tags{margin-top:18px}}
 @media(prefers-reduced-motion:reduce){.editorial-card,.editorial-card[data-tilt],.editorial-card[data-tilt]:hover{transform:translateY(var(--stack-y));transition:none}.editorial-model canvas,.editorial-card:hover .editorial-model canvas{transform:none;transition:none}.editorial-model-loader i{animation:none}}
+
+/* Stable vector icons: prevents platform emoji glyphs from changing the visual language. */
+.side-label{display:inline-flex;align-items:center;gap:7px}
+.side-label svg{width:14px;height:14px;flex:none}
+.hero-bottom button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px}
+.hero-bottom button svg{width:15px;height:15px;flex:none}
+.anatomy-cta{display:inline-flex;align-items:center;gap:7px}
+.anatomy-cta svg{width:15px;height:15px;flex:none}
+@media(max-width:640px){.side-label{gap:5px}.side-label svg{width:12px;height:12px}.hero-bottom button{gap:5px}.hero-bottom button svg{width:14px;height:14px}.anatomy-cta{gap:5px}.anatomy-cta svg{width:13px;height:13px}}

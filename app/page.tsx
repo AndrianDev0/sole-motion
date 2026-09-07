@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { ArrowUpRight, ArrowDown, Plus, Minus, ShoppingBag, X, Check, MoveHorizontal } from 'lucide-react';
+import { ArrowUpRight, ArrowDown, Plus, Minus, ShoppingBag, X, Check, MoveHorizontal, Asterisk, Pause, Play } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import ShoeScene from './shoe-scene';
@@ -91,7 +91,7 @@ function TickerRun({ offset = 0 }: { offset?: number }) {
         const delay = `${(letterIndex++ % 24) * 0.11 + offset}s`;
         return <span className="ticker-letter" style={{ animationDelay: delay }} key={`${wordIndex}-${charIndex}`}>{letter === ' ' ? '\u00a0' : letter}</span>;
       })}
-      <span className="ticker-symbol" aria-hidden="true">✳</span>
+      <Asterisk className="ticker-symbol" aria-hidden="true" strokeWidth={2.25}/>
     </span>)}
   </div>;
 }
@@ -205,7 +205,7 @@ export default function Home() {
         <h1 id="hero-heading">ВНЕ<br/><span>ГРАВИТАЦИИ.</span></h1>
         <div className="orbit" aria-hidden="true"/>
         <ShoeScene edition={edition} motion={motion}/>
-        <div className="side-label">СОЗДАНЫ ДЛЯ ДВИЖЕНИЯ ↗</div>
+        <div className="side-label"><span>СОЗДАНЫ ДЛЯ ДВИЖЕНИЯ</span><ArrowUpRight aria-hidden="true"/></div>
         {!heroProduct && <><div className="hero-copy"><span className="small-label">NIKE AIR FORCE 1 / 07</span><p>Земля подождёт.<br/>Твой следующий шаг — <strong>выше.</strong></p><a className="primary-button" href="#product">Выбрать свою пару <ArrowUpRight size={21}/></a></div>
         <div className="hero-sticker" aria-hidden="true">НИЖЕ<br/>ТОЛЬКО<br/><b>ГРАВИТАЦИЯ.</b><ArrowDown size={22}/></div></>}
         {heroProduct && <aside key={heroShowcaseRun} className={'hero-pitch '+heroProduct.color} aria-live="polite" aria-atomic="true">
@@ -216,7 +216,7 @@ export default function Home() {
             <div className="hero-pitch-benefits">{heroProduct.benefits.map((benefit,index)=><div key={benefit.title} style={{'--pitch-delay': `${.32 + index * .1}s`} as CSSProperties}><span>0{index + 1}</span><p><strong>{benefit.title}</strong><small>{benefit.text}</small></p></div>)}</div>
           </div>
         </aside>}
-        <div className="hero-bottom"><span><ArrowDown size={16}/> ЛИСТАЙ. ПРИЗЕМЛИМСЯ ВМЕСТЕ.</span><button onClick={() => setMotion(!motion)} aria-pressed={motion}>{motion ? 'Ⅱ' : '▷'} Анимация {motion ? 'вкл.' : 'выкл.'}</button><span>01 — 03</span></div>
+        <div className="hero-bottom"><span><ArrowDown size={16}/> ЛИСТАЙ. ПРИЗЕМЛИМСЯ ВМЕСТЕ.</span><button onClick={() => setMotion(!motion)} aria-pressed={motion}>{motion ? <Pause aria-hidden="true"/> : <Play aria-hidden="true"/>}<span>Анимация {motion ? 'вкл.' : 'выкл.'}</span></button><span>01 — 03</span></div>
       </div>
     </section>
     <div className="ticker" aria-hidden="true"><div className="ticker-track"><TickerRun/><TickerRun offset={-1.3}/></div></div>
@@ -247,7 +247,7 @@ export default function Home() {
         <span className="anatomy-word" aria-hidden="true">AIR</span>
         <ShoeImage alt="Белый Nike Air Force 1, вид сбоку" className="anatomy-shoe tint-white" loading="lazy"/>
         {anatomyPoints.map((point,index)=><button type="button" key={point.position} className={`callout callout-${point.position} ${activeHotspot===index?'is-active':''}`} aria-pressed={activeHotspot===index} onMouseEnter={()=>setActiveHotspot(index)} onMouseLeave={()=>setActiveHotspot(null)} onFocus={()=>setActiveHotspot(index)} onBlur={()=>setActiveHotspot(null)} onClick={()=>setActiveHotspot(current=>current===index?null:index)}><b>{String(index+1).padStart(2,'0')}</b><span>{point.label[0]}<br/>{point.label[1]}</span><small>{point.note}</small></button>)}
-        <div className="anatomy-foot"><span>EST. 1982</span><span>ВЫБЕРИ ТОЧКУ ↗</span></div>
+        <div className="anatomy-foot"><span>EST. 1982</span><span className="anatomy-cta">ВЫБЕРИ ТОЧКУ <ArrowUpRight aria-hidden="true"/></span></div>
       </div>
     </section>
     <section className="details" id="details"><div data-reveal><span className="small-label">04 / БЛИЖЕ К ДЕЛУ</span><h2>БОЛЬШЕ<br/>ЧЕМ <span className="details-highlight">ФОРМА.</span></h2></div><div className="detail-list" data-reveal>{detailItems.map((item,index)=><article key={item.title} className={openDetail===index?'is-open':''}><span className="detail-number">{String(index+1).padStart(2,'0')}</span><div><h3>{item.title}</h3><p>{item.text}</p><div className="detail-extra" aria-hidden={openDetail!==index}><span>{item.spec}</span><ShoeImage alt="" className={`detail-preview detail-preview-${index+1}`}/></div></div><button className="detail-toggle" type="button" aria-expanded={openDetail===index} aria-label={`${openDetail===index?'Свернуть':'Раскрыть'}: ${item.title}`} onClick={()=>setOpenDetail(current=>current===index?null:index)}><ArrowUpRight/></button></article>)}</div></section>
