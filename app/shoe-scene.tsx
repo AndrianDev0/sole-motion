@@ -22,8 +22,10 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
         import('three/addons/environments/RoomEnvironment.js'),
       ]);
       if (disposed || !element) return;
-      const renderer = new T.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.75 : 2));
+      // Mobile keeps the model detailed, but avoids multisample and oversized
+      // render targets that make touch scrolling drop frames on iOS/Android.
+      const renderer = new T.WebGLRenderer({ alpha: true, antialias: !isPhone, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : 2));
       renderer.setClearColor(0xffffff, 0);
       renderer.domElement.setAttribute('role', 'img');
       renderer.domElement.setAttribute('aria-label', 'Nike Air Force 1 плавно разворачивается и приземляется при прокрутке страницы.');
@@ -111,10 +113,14 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
           raf = requestAnimationFrame(animate);
         }
       };
-      const intersection = new IntersectionObserver(entries => { isVisible = entries[0].isIntersecting; if (isVisible) startLoop(); });
+      // Keep a generous visibility window: mobile browsers can briefly report a
+      // sticky section as outside the viewport while the address bar collapses.
+      const intersection = new IntersectionObserver(entries => { isVisible = entries[0].isIntersecting; if (isVisible) startLoop(); }, { rootMargin: '150% 0px' });
       intersection.observe(section);
       const visibility = () => { if (!document.hidden) startLoop(); };
+      const wakeOnScroll = () => { if (!document.hidden) startLoop(); };
       document.addEventListener('visibilitychange', visibility);
+      window.addEventListener('scroll', wakeOnScroll, { passive: true });
       const move = (event: PointerEvent) => {
         if (event.pointerType === 'touch') return;
         targetX = Math.max(-1, Math.min(1, event.clientX / window.innerWidth * 2 - 1));
@@ -122,7 +128,7 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
       };
       window.addEventListener('pointermove', move, { passive: true });
       release = () => {
-        cancelAnimationFrame(raf); resizeObserver.disconnect(); intersection.disconnect(); document.removeEventListener('visibilitychange', visibility);
+        cancelAnimationFrame(raf); resizeObserver.disconnect(); intersection.disconnect(); document.removeEventListener('visibilitychange', visibility); window.removeEventListener('scroll', wakeOnScroll);
         window.removeEventListener('pointermove', move);
         const textures = new Set<Texture>();
         meshes.forEach(mesh => mesh.geometry.dispose());
