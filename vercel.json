@@ -1,0 +1,12 @@
+{
+  "buildCommand": "pnpm run build",
+  "functions": {
+    "api/index.mjs": {
+      "runtime": "nodejs22.x",
+      "includeFiles": ["dist/**"]
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api" }
+  ]
+}
