@@ -44,14 +44,21 @@ async function fetchAsset(request) {
 export default async function handler(req, res) {
   const protocol = req.headers['x-forwarded-proto'] || 'https';
   const host = req.headers.host || 'localhost';
-  const url = `${protocol}://${host}${req.url || '/'}`;
+  const rewrittenUrl = new URL(req.url || '/', `${protocol}://${host}`);
+  const route = rewrittenUrl.searchParams.get('__route') || '';
+  rewrittenUrl.searchParams.delete('__route');
+  const pathname = route ? `/${route.replace(/^\/+/, '')}` : '/';
+  const url = `${protocol}://${host}${pathname}${rewrittenUrl.search}`;
   const request = new Request(url, {
     method: req.method,
     headers: req.headers,
     body: req.method === 'GET' || req.method === 'HEAD' ? undefined : req,
     duplex: 'half',
   });
-  const response = await worker.fetch(request, { ASSETS: { fetch: fetchAsset } });
+  let response = await fetchAsset(request);
+  if (response.status === 404) {
+    response = await worker.fetch(request, { ASSETS: { fetch: fetchAsset } });
+  }
 
   res.statusCode = response.status;
   response.headers.forEach((value, key) => res.setHeader(key, value));
