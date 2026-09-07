@@ -24,13 +24,18 @@ export default function ProductModel({ edition, label, view = 'product' }: { edi
     let disposed = false;
     let cleanup = () => {};
     async function initialize() {
+      const isPhone = window.matchMedia('(max-width: 767px)').matches;
+      if (view !== 'product' && isPhone) {
+        setFailed(true);
+        return;
+      }
       const [T, { GLTFLoader }, { RoomEnvironment }] = await Promise.all([
         import('three'), import('three/addons/loaders/GLTFLoader.js'),
         import('three/addons/environments/RoomEnvironment.js'),
       ]);
       if (disposed) return;
-      const renderer = new T.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 700 ? 1.5 : 2));
+      const renderer = new T.WebGLRenderer({ alpha: true, antialias: !isPhone, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : 2));
       renderer.setClearColor(0xffffff, 0);
       renderer.outputColorSpace = T.SRGBColorSpace;
       renderer.toneMapping = T.ACESFilmicToneMapping;
@@ -105,7 +110,8 @@ export default function ProductModel({ edition, label, view = 'product' }: { edi
         const width = Math.max(1, container.clientWidth), height = Math.max(1, container.clientHeight);
         renderer.setSize(width, height);
         const aspect = width / height;
-        const halfHeight = Math.max(view === 'product' ? 1.45 : 1.58, (view === 'product' ? 2.2 : 2.02) / aspect);
+        const mobileSafety = isPhone && view === 'product' ? 1.12 : 1;
+        const halfHeight = Math.max(view === 'product' ? 1.45 : 1.58, (view === 'product' ? 2.2 : 2.02) * mobileSafety / aspect);
         camera.left = -halfHeight * aspect; camera.right = halfHeight * aspect;
         camera.top = halfHeight; camera.bottom = -halfHeight; camera.updateProjectionMatrix();
       };

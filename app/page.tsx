@@ -216,7 +216,7 @@ export default function Home() {
             <div className="hero-pitch-benefits">{heroProduct.benefits.map((benefit,index)=><div key={benefit.title} style={{'--pitch-delay': `${.32 + index * .1}s`} as CSSProperties}><span>0{index + 1}</span><p><strong>{benefit.title}</strong><small>{benefit.text}</small></p></div>)}</div>
           </div>
         </aside>}
-        <div className="hero-bottom"><span><ArrowDown size={16}/> ЛИСТАЙ. ПРИЗЕМЛИМСЯ ВМЕСТЕ.</span><button onClick={() => setMotion(!motion)} aria-pressed={motion}>{motion ? <Pause aria-hidden="true"/> : <Play aria-hidden="true"/>}<span>Анимация {motion ? 'вкл.' : 'выкл.'}</span></button><span>01 — 03</span></div>
+        <div className="hero-bottom"><span><ArrowDown size={16}/><span className="scroll-copy-full">ЛИСТАЙ. ПРИЗЕМЛИМСЯ ВМЕСТЕ.</span><span className="scroll-copy-short">ЛИСТАЙ</span></span><button onClick={() => setMotion(!motion)} aria-pressed={motion}>{motion ? <Pause aria-hidden="true"/> : <Play aria-hidden="true"/>}<span>Анимация {motion ? 'вкл.' : 'выкл.'}</span></button><span>01 — 03</span></div>
       </div>
     </section>
     <div className="ticker" aria-hidden="true"><div className="ticker-track"><TickerRun/><TickerRun offset={-1.3}/></div></div>
@@ -241,7 +241,7 @@ export default function Home() {
       <div className="edition-grid editorial-grid" data-reveal>{editions.map((e,i)=>{const story=editorialStories[i];return <article className={'editorial-card '+e.color+' story-'+story.crop} key={e.name} data-tilt><div className="story-top"><span>{story.eyebrow}</span><span>3D COLOR STUDY</span></div><div className="story-frame"><span className="story-index" aria-hidden="true">0{i+1}</span><ProductModel edition={i} label={e.label} view={story.crop}/><span className="story-detail">{story.detail}</span></div><div className="story-copy"><h3>{story.title}</h3><p>{story.description}</p></div><div className="story-tags" aria-label="Характер образа">{story.tags.map(tag=><span key={tag}>{tag}</span>)}</div></article>})}</div>
     </section>
     <section className="anatomy" aria-labelledby="anatomy-title">
-      <div className="anatomy-head" data-reveal><span className="small-label">03 / АНАТОМИЯ ЛЕГЕНДЫ</span><h2 id="anatomy-title">СМОТРИ<br/><span>БЛИЖЕ.</span></h2><p>Культовый силуэт читается в деталях. Наведи мышь — поверхность отреагирует на движение.</p></div>
+      <div className="anatomy-head" data-reveal><span className="small-label">03 / АНАТОМИЯ ЛЕГЕНДЫ</span><h2 id="anatomy-title">СМОТРИ<br/><span>БЛИЖЕ.</span></h2><p>Культовый силуэт читается в деталях. <span className="pointer-copy">Наведи мышь</span><span className="touch-copy">Коснись точки</span> — поверхность отреагирует на движение.</p></div>
       <div className="anatomy-visual" data-reveal data-tilt>
         <div className="anatomy-plate" aria-hidden="true" />
         <span className="anatomy-word" aria-hidden="true">AIR</span>

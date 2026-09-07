@@ -16,13 +16,14 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
     let disposed = false;
     let release = () => {};
     async function initialize() {
+      const isPhone = window.matchMedia('(max-width: 767px)').matches;
       const [T, { GLTFLoader }, { RoomEnvironment }] = await Promise.all([
         import('three'), import('three/addons/loaders/GLTFLoader.js'),
         import('three/addons/environments/RoomEnvironment.js'),
       ]);
       if (disposed || !element) return;
-      const renderer = new T.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 700 ? 1.5 : 2));
+      const renderer = new T.WebGLRenderer({ alpha: true, antialias: !isPhone, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : 2));
       renderer.setClearColor(0xffffff, 0);
       renderer.domElement.setAttribute('role', 'img');
       renderer.domElement.setAttribute('aria-label', 'Nike Air Force 1 плавно разворачивается и приземляется при прокрутке страницы.');
@@ -84,7 +85,8 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
         bounds.setFromObject(pivot);
         const extentX = Math.max(Math.abs(bounds.min.x), Math.abs(bounds.max.x));
         const extentY = Math.max(Math.abs(bounds.min.y), Math.abs(bounds.max.y));
-        const halfHeight = Math.max(1.48, 2.18 / aspect, extentY * 1.18, extentX * 1.18 / aspect);
+        const safety = isPhone ? 1.32 : 1.18;
+        const halfHeight = Math.max(1.48, 2.18 / aspect, extentY * safety, extentX * safety / aspect);
         camera.left = -halfHeight * aspect; camera.right = halfHeight * aspect;
         camera.top = halfHeight; camera.bottom = -halfHeight; camera.updateProjectionMatrix();
         shadow.style.opacity = String(pose.shadow);

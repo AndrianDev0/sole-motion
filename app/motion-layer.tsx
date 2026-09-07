@@ -47,7 +47,8 @@ export default function MotionLayer() {
     }, { threshold: .14, rootMargin: '0px 0px -6% 0px' });
     reveals.forEach(element => observer.observe(element));
 
-    const tiltTargets = [...document.querySelectorAll<HTMLElement>('[data-tilt]')];
+    const canTilt = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const tiltTargets = canTilt ? [...document.querySelectorAll<HTMLElement>('[data-tilt]')] : [];
     const cleanups = tiltTargets.map(element => {
       const move = (event: PointerEvent) => {
         if (event.pointerType === 'touch') return;
