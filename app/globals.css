@@ -374,8 +374,10 @@ main,section,header,footer{min-width:0}
  .price{margin:24px 0;font-size:27px;font-variant-numeric:tabular-nums}
  .option-label{margin:24px 0 10px;font-size:15px}
  .color-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
- .color-choice{position:relative;width:100%;min-width:0;min-height:52px;gap:7px;padding:8px;border-radius:14px;font-size:12px;white-space:nowrap}
- .color-dot{flex:0 0 22px}
+ .color-choice{position:relative;display:grid;grid-template-rows:24px auto;place-items:center;width:100%;min-width:0;min-height:68px;gap:6px;padding:8px 4px;border-radius:14px;font-size:12px;white-space:nowrap}
+ .color-choice>[data-slot=radio-group-item]{position:relative;left:auto;top:auto;z-index:2;transform:none}
+ .color-choice>label{position:relative;inset:auto;display:block;max-width:100%;padding:0;text-align:center;line-height:1.1;cursor:pointer}
+ .color-dot{width:24px;height:24px;flex:0 0 24px}
  .size-options{gap:7px}
  .size-choice{min-height:48px;border-radius:12px}
  .size-feedback{margin:12px 0 18px;font-size:13px;line-height:1.45}
@@ -450,8 +452,8 @@ main,section,header,footer{min-width:0}
  .header nav{display:none}
  .wordmark{font-size:37px}
  .hero-bottom button span{display:none}
- .color-choice{justify-content:center;padding:7px 5px;font-size:11px}
- .color-dot{width:18px;height:18px;flex-basis:18px}
+ .color-choice{padding:7px 3px;font-size:11px}
+ .color-dot{width:22px;height:22px;flex-basis:22px}
  .hero-pitch-benefits small{display:none}
  .hero-pitch-benefits p{grid-template-columns:1fr}
 }
