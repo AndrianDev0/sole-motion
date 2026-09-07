@@ -22,14 +22,15 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
         import('three/addons/environments/RoomEnvironment.js'),
       ]);
       if (disposed || !element) return;
-      const renderer = new T.WebGLRenderer({ alpha: true, antialias: !isPhone, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : 2));
+      const renderer = new T.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.75 : 2));
       renderer.setClearColor(0xffffff, 0);
       renderer.domElement.setAttribute('role', 'img');
       renderer.domElement.setAttribute('aria-label', 'Nike Air Force 1 плавно разворачивается и приземляется при прокрутке страницы.');
       renderer.outputColorSpace = T.SRGBColorSpace;
       renderer.toneMapping = T.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.05;
+      // Keep the white leather below clipping so its panel seams and grain remain visible.
+      renderer.toneMappingExposure = isPhone ? .86 : .92;
       element.appendChild(renderer.domElement);
       const scene = new T.Scene();
       const camera = new T.OrthographicCamera(-3, 3, 2, -2, .01, 40);
@@ -39,11 +40,13 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
       const environment = generator.fromScene(room, .04);
       scene.environment = environment.texture;
       room.dispose(); generator.dispose();
-      scene.add(new T.HemisphereLight(0xffffff, 0x202522, 1.3));
-      const key = new T.DirectionalLight(0xffffff, 2.4);
+      scene.add(new T.HemisphereLight(0xffffff, 0x202522, isPhone ? .92 : 1.05));
+      const key = new T.DirectionalLight(0xffffff, isPhone ? 1.85 : 2.05);
       key.position.set(-3, 5, 7); scene.add(key);
-      const fill = new T.DirectionalLight(0xffffff, 1.1);
+      const fill = new T.DirectionalLight(0xffffff, isPhone ? .62 : .78);
       fill.position.set(4, 1, -3); scene.add(fill);
+      const rim = new T.DirectionalLight(0x7349e8, isPhone ? .22 : .16);
+      rim.position.set(4, 2, 5); scene.add(rim);
       const pivot = new T.Group(); scene.add(pivot);
       const normalized = new T.Group(); pivot.add(normalized);
       const meshes: Mesh[] = [];
@@ -150,8 +153,10 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
             const materials = Array.isArray(object.material) ? object.material : [object.material];
             materials.forEach(material => {
               if (material instanceof T.MeshStandardMaterial) {
-                material.envMapIntensity = .75;
-                material.userData.originalColor = material.color.clone();
+                material.envMapIntensity = isPhone ? .52 : .62;
+                material.userData.originalColor = material.color.clone().multiplyScalar(isPhone ? .9 : .95);
+                material.roughness = Math.max(material.roughness, .48);
+                if (material.normalMap) material.normalScale.set(1.18, 1.18);
                 materialSet.add(material);
                 if (material.map) material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
               }
