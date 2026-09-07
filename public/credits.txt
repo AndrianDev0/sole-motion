@@ -1,0 +1,7 @@
+DROP is an independent local design concept, not an official Nike website or a functioning retailer.
+3D model: https://github.com/klsmbl/Sneakr.lab/blob/main/frontend/public/models/airforccenew.glb
+Repository describes educational/demo use; no explicit asset license is supplied. No open license is claimed.
+Product photograph: Nike Air Force 1 '07 CW2288-111.
+Source: https://www.nike.com/t/air-force-1-07-mens-shoes-XVPIszaq
+Changes: material recoloring, framing, scroll animation and photographic color treatments. Custom colors are illustrative concepts.
+Nike and Air Force 1 are trademarks of their respective owner. No affiliation or endorsement is implied.
