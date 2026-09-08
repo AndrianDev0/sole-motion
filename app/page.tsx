@@ -45,7 +45,7 @@ const editorialStories = [
     title: 'БЕЛЫЙ. ТОЧКА.',
     detail: 'НОСОК / ПЕРФОРАЦИЯ',
     description: 'Чистый цвет оставляет главное: линии панелей, перфорацию и массивную подошву.',
-    tags: ['ЧИСТО', 'НАВСЕГДА'],
+    tags: ['ЧИСТО', 'БЕЗ ШУМА'],
     crop: 'toe',
   },
   {
@@ -196,17 +196,17 @@ export default function Home() {
     <div className="drop-banner"><div><span>NEW DROP / AIR FORCE 1</span><span>БЕЛЫЙ · ГРАФИТ · МЯТНЫЙ</span><span>CONCEPT 2026</span></div></div>
     <header className="header">
       <a href="#top" className="wordmark" aria-label="DROP — на главную">drop<span>®</span></a>
-      <nav aria-label="Основная навигация"><a href="#collection">Коллекция <span>03</span></a><a href="#details">В деталях</a></nav>
+      <nav aria-label="Основная навигация"><a href="#collection">Три цвета <span>03</span></a><a href="#details">Почему AF1</a></nav>
       <button className="bag-button" onClick={() => setBagOpen(true)}><ShoppingBag size={17}/><span>Мой выбор</span><b>{count.toString().padStart(2,'0')}</b></button>
     </header>
     <section className="flight-section" aria-labelledby="hero-heading">
       <div className="flight-sticky">
-        <div className="hero-meta"><span><i/> ВИЗУАЛЬНЫЙ СНИКЕР-КОНЦЕПТ</span><span>DROP / 001</span></div>
+        <div className="hero-meta"><span><i/> ИНТЕРАКТИВНЫЙ СНИКЕР-КОНЦЕПТ</span><span>DROP / 001</span></div>
         <h1 id="hero-heading">ВНЕ<br/><span>ГРАВИТАЦИИ.</span></h1>
         <div className="orbit" aria-hidden="true"/>
         <ShoeScene edition={edition} motion={motion}/>
         <div className="side-label"><span>ПРОКРУТИ — ПАРА ОЖИВЁТ</span><ArrowUpRight aria-hidden="true"/></div>
-        {!heroProduct && <><div className="hero-copy"><span className="small-label">AIR FORCE 1 / ТРИ ЦВЕТА</span><p>Тот самый силуэт.<br/>Теперь — в <strong>твоём настроении.</strong></p><a className="primary-button" href="#product">Найти свой цвет <ArrowUpRight size={21}/></a></div>
+        {!heroProduct && <><div className="hero-copy"><span className="small-label">AIR FORCE 1 / ТРИ ЦВЕТА</span><p>Тот самый силуэт.<br/>Три цвета — <strong>выбирай свой.</strong></p><a className="primary-button" href="#product">Выбрать цвет <ArrowUpRight size={21}/></a></div>
         <div className="hero-sticker" aria-hidden="true">ФОРМА<br/>ЛОВИТ<br/><b>ДВИЖЕНИЕ.</b><ArrowDown size={22}/></div></>}
         {heroProduct && <aside key={heroShowcaseRun} className={'hero-pitch '+heroProduct.color} aria-live="polite" aria-atomic="true">
           <div className="hero-pitch-head"><span><i aria-hidden="true"/> COLORWAY / 0{heroShowcaseIndex + 1}</span><span>ВЫБРАНО · {heroProduct.label.toUpperCase()}</span></div>
@@ -233,7 +233,7 @@ export default function Home() {
           {['36','37','38','39','40','41','42','43','44','45'].map(s=><button type="button" aria-pressed={size===s} key={s} className={'size-choice '+(size===s?'chosen':'')} onClick={()=>{setSize(s);setSizeError(false)}}>{s}</button>)}
         </fieldset>
         <p className="size-feedback" aria-live="polite">{sizeError?'Сначала укажи размер.':size?`Выбран ${size} EU`:'Ориентируйся на привычный размер EU.'}</p>
-        <button className="primary-button add-button" onClick={addPair}>{added?'Пара уже в выборе':'Добавить эту пару'}{added?<Check size={21}/>:<Plus size={21}/>}</button>
+        <button className="primary-button add-button" onClick={addPair}>{added?'Пара уже в выборе':'Добавить в мой выбор'}{added?<Check size={21}/>:<Plus size={21}/>}</button>
         <span className="demo-note">Концепт-магазин: здесь можно собрать образ, но нельзя оформить оплату.</span>
       </div>
     </section>
