@@ -53,6 +53,7 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
       const normalized = new T.Group(); pivot.add(normalized);
       const meshes: Mesh[] = [];
       const materialSet = new Set<MeshStandardMaterial>();
+      const surfaces = isPhone ? (await import('./shoe-surface')).createShoeSurfaces() : null;
       let raf = 0, loopRunning = false, previousTime = 0, progress = 0, pointerX = 0, pointerY = 0;
       let targetX = 0, targetY = 0, isVisible = true;
       let distance = 1, top = 0, aspect = 1, lastEdition = -1;
@@ -137,6 +138,7 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
           material.dispose();
         });
         textures.forEach(texture => texture.dispose());
+        surfaces?.leather.dispose(); surfaces?.fabric.dispose();
         environment.dispose(); renderer.dispose(); renderer.domElement.remove();
       };
       try {
@@ -159,10 +161,24 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
             const materials = Array.isArray(object.material) ? object.material : [object.material];
             materials.forEach(material => {
               if (material instanceof T.MeshStandardMaterial) {
+                if (materialSet.has(material)) return;
                 material.envMapIntensity = isPhone ? .52 : .62;
                 material.userData.originalColor = material.color.clone().multiplyScalar(isPhone ? .9 : .95);
                 material.roughness = Math.max(material.roughness, .48);
                 if (material.normalMap) material.normalScale.set(1.18, 1.18);
+                if (surfaces && object.geometry.getAttribute('uv')) {
+                  const fabric = /fabric|cloth/i.test(material.name);
+                  const leather = /leather/i.test(material.name);
+                  if (fabric || leather) {
+                    material.normalMap = fabric ? surfaces.fabric : surfaces.leather;
+                    material.normalScale.setScalar(fabric ? .65 : .45);
+                    material.roughness = fabric ? .92 : .64;
+                  }
+                  if (/^Metal$|Degradable_Metal/i.test(material.name)) {
+                    material.metalness = .65;
+                    material.roughness = .32;
+                  }
+                }
                 materialSet.add(material);
                 if (material.map) material.map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
               }
