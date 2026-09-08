@@ -34,8 +34,8 @@ export default function ProductModel({ edition, label, view = 'product' }: { edi
         import('three/addons/environments/RoomEnvironment.js'),
       ]);
       if (disposed) return;
-      const renderer = new T.WebGLRenderer({ alpha: true, antialias: !isPhone, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : 2));
+      const renderer = new T.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setClearColor(0xffffff, 0);
       renderer.outputColorSpace = T.SRGBColorSpace;
       renderer.toneMapping = T.ACESFilmicToneMapping;
@@ -106,14 +106,19 @@ export default function ProductModel({ edition, label, view = 'product' }: { edi
       applyEdition.current = updateEdition;
       updateEdition(selected.current);
       setLoaded(true);
+      let renderWidth = 0, renderHeight = 0;
       const resize = () => {
         const width = Math.max(1, container.clientWidth), height = Math.max(1, container.clientHeight);
-        renderer.setSize(width, height);
+        if (width !== renderWidth || height !== renderHeight) {
+          renderWidth = width; renderHeight = height;
+          renderer.setSize(width, height);
+        }
         const aspect = width / height;
         const mobileSafety = isPhone && view === 'product' ? 1.12 : 1;
         const halfHeight = Math.max(view === 'product' ? 1.45 : 1.58, (view === 'product' ? 2.2 : 2.02) * mobileSafety / aspect);
         camera.left = -halfHeight * aspect; camera.right = halfHeight * aspect;
         camera.top = halfHeight; camera.bottom = -halfHeight; camera.updateProjectionMatrix();
+        renderer.render(scene, camera);
       };
       const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container); resize();
       const animate = () => {
