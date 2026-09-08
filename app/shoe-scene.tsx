@@ -22,10 +22,8 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
         import('three/addons/environments/RoomEnvironment.js'),
       ]);
       if (disposed || !element) return;
-      // Mobile keeps the model detailed, but avoids multisample and oversized
-      // render targets that make touch scrolling drop frames on iOS/Android.
-      const renderer = new T.WebGLRenderer({ alpha: true, antialias: !isPhone, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isPhone ? 1.25 : 2));
+      const renderer = new T.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setClearColor(0xffffff, 0);
       renderer.domElement.setAttribute('role', 'img');
       renderer.domElement.setAttribute('aria-label', 'Nike Air Force 1 плавно разворачивается и приземляется при прокрутке страницы.');
@@ -62,10 +60,18 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
       const sticky = section.querySelector('.flight-sticky') as HTMLElement;
       const shadow = element.querySelector('.landing-shadow') as HTMLElement;
       const bounds = new T.Box3(), size = new T.Vector3(), center = new T.Vector3();
+      const modelBounds = new T.Box3();
+      let renderWidth = 0, renderHeight = 0;
       function resize() {
         if (!element) return;
         const width = Math.max(1, element.clientWidth), height = Math.max(1, element.clientHeight);
-        renderer.setSize(width, height); aspect = width / height;
+        if (width !== renderWidth || height !== renderHeight) {
+          renderWidth = width; renderHeight = height;
+          renderer.setSize(width, height);
+          // Resizing clears the drawing buffer; repaint before the browser presents it.
+          if (meshes.length) renderer.render(scene, camera);
+        }
+        aspect = width / height;
         top = window.scrollY + section.getBoundingClientRect().top;
         distance = Math.max(1, section.offsetHeight - sticky.offsetHeight);
       }
@@ -88,7 +94,7 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
         pivot.rotation.set(pose.rx, pose.ry, pose.rz);
         pivot.position.set(pose.x, pose.y, 0); pivot.scale.setScalar(pose.scale);
         pivot.updateMatrixWorld(true);
-        bounds.setFromObject(pivot);
+        bounds.copy(modelBounds).applyMatrix4(pivot.matrixWorld);
         const extentX = Math.max(Math.abs(bounds.min.x), Math.abs(bounds.max.x));
         const extentY = Math.max(Math.abs(bounds.min.y), Math.abs(bounds.max.y));
         const safety = isPhone ? 1.32 : 1.18;
@@ -155,6 +161,8 @@ export default function ShoeScene({ edition, motion }: { edition: number; motion
         const modelScale = 3.65 / Math.max(size.x, size.y, size.z);
         normalized.scale.setScalar(modelScale);
         normalized.position.copy(center.multiplyScalar(-modelScale));
+        normalized.updateMatrixWorld(true);
+        modelBounds.setFromObject(normalized);
         gltf.scene.traverse(object => {
           if (object instanceof T.Mesh) {
             meshes.push(object);

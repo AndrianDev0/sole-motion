@@ -326,7 +326,7 @@ main,section,header,footer{min-width:0}
  .bag-button b{position:absolute;top:1px;right:-3px;width:20px;height:20px;margin:0;border:0;background:var(--violet);color:var(--white);font-size:9px;font-variant-numeric:tabular-nums}
 
  .flight-section{height:175svh;min-height:980px}
- .flight-sticky{height:100dvh;min-height:620px;padding:22px var(--mobile-gutter) max(14px,env(safe-area-inset-bottom))}
+ .flight-sticky{height:100svh;min-height:620px;padding:22px var(--mobile-gutter) max(14px,env(safe-area-inset-bottom))}
  .hero-meta{min-width:0;font-size:9px;letter-spacing:.035em}
  .hero-meta span:first-child{min-width:0;gap:7px;white-space:nowrap}
  .hero-meta span:last-child{display:none}
