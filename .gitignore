@@ -39,3 +39,6 @@ next-env.d.ts
 /dist-backup-*/
 /output/
 /.playwright-cli/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
